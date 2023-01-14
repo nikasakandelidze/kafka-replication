@@ -11,7 +11,7 @@ import { DataSource } from 'typeorm';
 
 @Injectable()
 export class OrderService {
-  constructor(private dataSource: DataSource) {}
+  constructor(private readonly dataSource: DataSource) {}
 
   async addNewOrder(order: OrderDto) {
     const queryRunner = this.dataSource.createQueryRunner();
