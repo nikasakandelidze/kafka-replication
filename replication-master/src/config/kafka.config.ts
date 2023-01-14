@@ -11,13 +11,8 @@ const getBrokers = (configService: ConfigService) => {
 
 export const setupKafkaConfig = (configService: ConfigService) => {
   return {
-    // transport: Transport.KAFKA,
-    // options: {
-    // client: {
     clientId: configService.get<string>('KAFKA_CLIENT_ID'),
     brokers: getBrokers(configService),
     ssl: false,
-    // },
-    // },
   };
 };
