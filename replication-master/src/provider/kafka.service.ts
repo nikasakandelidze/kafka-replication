@@ -10,6 +10,7 @@ export class KafkaService implements OnApplicationShutdown {
   async setup() {
     this.producer = this.kafkaClient.producer({
       createPartitioner: Partitioners.DefaultPartitioner,
+      allowAutoTopicCreation: true,
     });
     await this.producer.connect();
     this.setupTeardownListeners();

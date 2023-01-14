@@ -1,16 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Kafka } from 'kafkajs';
-import { setupKafkaConfig } from './config/kafka.config';
-import { OrderController } from './controller/order.controller';
-import { KafkaService } from './provider/kafka.service';
-import { OrderService } from './provider/order.service';
-import { OutboxRelayService } from './provider/outbox.service';
 import { TypeOrmConfigService } from './repository/database.config';
+import { setupKafkaConfig } from './config/kafka.config';
+import { KafkaService } from './provider/kafka.service';
+import { OrderCreationService } from './provider/order.service';
 import { Order } from './repository/entity/order.entity';
-import { Outbox } from './repository/entity/outbox.entity';
 
 @Module({
   imports: [
@@ -20,12 +16,11 @@ import { Outbox } from './repository/entity/outbox.entity';
       inject: [ConfigService],
       useClass: TypeOrmConfigService,
     }),
-    TypeOrmModule.forFeature([Outbox, Order]),
-    ScheduleModule.forRoot(),
+    TypeOrmModule.forFeature([Order]),
   ],
-  controllers: [OrderController],
+  controllers: [],
   providers: [
-    OrderService,
+    OrderCreationService,
     {
       provide: 'KAFKA_CLIENT',
       useFactory: (configService: ConfigService) => {
@@ -34,7 +29,6 @@ import { Outbox } from './repository/entity/outbox.entity';
       inject: [ConfigService],
     },
     KafkaService,
-    OutboxRelayService,
   ],
 })
 export class AppModule {}
